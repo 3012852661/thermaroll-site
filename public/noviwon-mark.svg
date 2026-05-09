@@ -1,0 +1,9 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Noviwon mark</title>
+  <desc id="desc">Minimal Noviwon NW mark.</desc>
+  <rect width="512" height="512" rx="112" fill="#0F172A"/>
+  <path d="M126 347V165H176L299 291V165H343V347H293L170 221V347H126Z" fill="#F8FAFC"/>
+  <path d="M229 347L333 165H386L282 347H229Z" fill="#2DD4BF"/>
+  <circle cx="126" cy="165" r="14" fill="#2DD4BF"/>
+  <circle cx="343" cy="347" r="14" fill="#2DD4BF"/>
+</svg>

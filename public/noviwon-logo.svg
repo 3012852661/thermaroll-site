@@ -1,0 +1,28 @@
+<svg width="760" height="180" viewBox="0 0 760 180" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Noviwon logo</title>
+  <desc id="desc">Minimal Noviwon wordmark for industrial materials and supply chain technology.</desc>
+  <defs>
+    <linearGradient id="wordGradient" x1="214" y1="48" x2="604" y2="136" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#111827"/>
+      <stop offset="1" stop-color="#0F766E"/>
+    </linearGradient>
+  </defs>
+
+  <g>
+    <rect x="22" y="30" width="120" height="120" rx="30" fill="#0F172A"/>
+    <path d="M53 121V59H70L112 102V59H127V121H110L68 78V121H53Z" fill="#F8FAFC"/>
+    <path d="M88 121L123 59H141L106 121H88Z" fill="#2DD4BF"/>
+    <circle cx="53" cy="59" r="4.5" fill="#2DD4BF"/>
+    <circle cx="127" cy="121" r="4.5" fill="#2DD4BF"/>
+  </g>
+
+  <g fill="url(#wordGradient)">
+    <path d="M205 51H230L300 128V51H326V134H301L231 57V134H205V51Z"/>
+    <path d="M346 93C346 68 364 49 392 49C420 49 438 68 438 93C438 118 420 137 392 137C364 137 346 118 346 93ZM412 93C412 80 404 72 392 72C380 72 372 80 372 93C372 106 380 114 392 114C404 114 412 106 412 93Z"/>
+    <path d="M442 51H470L491 108L512 51H540L506 134H476L442 51Z"/>
+    <path d="M552 51H578V134H552V51Z"/>
+    <path d="M594 51H621L638 101L657 51H681L700 101L717 51H744L714 134H687L669 88L651 134H624L594 51Z"/>
+  </g>
+
+  <text x="207" y="158" fill="#64748B" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" letter-spacing="4">INDUSTRIAL MATERIALS · SUPPLY CHAIN SYSTEMS</text>
+</svg>

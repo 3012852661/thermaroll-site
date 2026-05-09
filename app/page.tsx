@@ -1,293 +1,755 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
-import i18n from 'i18next';
-import { initReactI18next, useTranslation } from 'react-i18next';
-import LanguageDetector from 'i18next-browser-languagedetector';
-import { 
-  Menu, X, ArrowRight, Send, Loader2, CheckCircle2, MessageCircle, Link2, Phone, Mail
-} from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useEffect, useState } from "react";
+import Image from "next/image";
+import i18n from "i18next";
+import { AnimatePresence, motion } from "framer-motion";
+import {
+  ArrowRight,
+  BadgeCheck,
+  BarChart3,
+  Boxes,
+  CheckCircle2,
+  ChevronRight,
+  Cloud,
+  Cpu,
+  Database,
+  Factory,
+  FileText,
+  Globe2,
+  Layers3,
+  Mail,
+  Menu,
+  MessageCircle,
+  Network,
+  Send,
+  ShieldCheck,
+  Sparkles,
+  Truck,
+  X,
+} from "lucide-react";
+import { initReactI18next, useTranslation } from "react-i18next";
 
-// --- i18next 插件配置 ---
 const resources = {
   en: {
     translation: {
-      nav: { products: "Products", factory: "Factory", inquiry: "Inquiry" },
+      brand: "Noviwon",
+      company: "Shenzhen Nuowei Advanced Materials Co., Ltd.",
+      nav: {
+        platform: "Platform",
+        materials: "Materials",
+        systems: "Systems",
+        global: "Global Trade",
+        inquiry: "Contact",
+      },
       hero: {
-        tag: "EST. 2011 / PREMIUM QUALITY",
-        title: "The Art of\nTactile Paper",
-        sub: "Providing high-quality, eco-friendly paper solutions. From specialty paper wholesale to bespoke packaging.",
-        btn: "Explore Collection"
+        badge: "Industrial Materials & Smart Supply Chain Solutions",
+        title: "Where advanced materials meet supply chain intelligence",
+        sub: "Noviwon connects industrial materials sourcing, SaaS workflow systems and global trade execution for manufacturers, importers and fast-growing B2B brands.",
+        primary: "Start a Project",
+        secondary: "Explore Structure",
       },
-      stats: { area: "Facility Area", output: "Annual Output", export: "Export Countries" },
-      factory: {
-        title: "Forest to Finish",
-        desc: "Equipped with fully automated Heidelberg presses, we ensure every step—from pulp sourcing to final coating—meets global eco-standards.",
-        features: ["FSC Certified", "High-Precision", "Eco-Ink"]
+      stats: {
+        markets: "Global markets served",
+        categories: "Material categories",
+        workflow: "Digital workflow nodes",
+        response: "RFQ response window",
       },
-      form: {
-        title: "Request Quote",
-        sub: "Our team will respond within 24 hours.",
+      platform: {
+        eyebrow: "Noviwon Operating System",
+        title: "A technology company built around real supply chains",
+        sub: "We organize material procurement, production coordination, quality documents, shipment milestones and customer communication into one connected operating layer.",
+        pillars: [
+          {
+            name: "Noviwon Materials",
+            label: "Industrial Materials",
+            desc: "Functional films, paper-based materials, labels, packaging substrates and custom industrial consumables for manufacturing and distribution.",
+          },
+          {
+            name: "Noviwon Systems",
+            label: "SaaS & Data",
+            desc: "RFQ management, supplier collaboration, order tracking, QC records and purchasing analytics for smarter B2B operations.",
+          },
+          {
+            name: "Noviwon Global",
+            label: "International Trade",
+            desc: "Export sourcing, supplier coordination, consolidation, documentation and logistics execution for overseas buyers.",
+          },
+        ],
+      },
+      materials: {
+        eyebrow: "Noviwon Materials",
+        title: "Material supply with engineering context",
+        sub: "Beyond catalog trading, we help buyers define specifications, match supplier capabilities and keep repeat orders stable across batches.",
+        items: [
+          "Functional films and laminated materials",
+          "Paper-based packaging and label substrates",
+          "Adhesive, coating and converted roll materials",
+          "Custom industrial consumables and OEM programs",
+        ],
+      },
+      systems: {
+        eyebrow: "Noviwon Systems",
+        title: "SaaS tools for sourcing, orders and visibility",
+        sub: "A modular digital layer for trade teams that need cleaner RFQs, faster supplier responses and traceable order execution.",
+        modules: [
+          "RFQ pipeline",
+          "Supplier workspace",
+          "Order milestone tracking",
+          "QC document center",
+          "Inventory and reorder alerts",
+          "Trade analytics dashboard",
+        ],
+      },
+      global: {
+        eyebrow: "Noviwon Global",
+        title: "From qualified suppliers to landed delivery",
+        sub: "We combine China-based sourcing execution with international buyer communication, helping overseas customers reduce uncertainty before, during and after shipment.",
+        steps: ["Brief", "Supplier match", "Sample & quote", "Production", "QC docs", "Shipment"],
+      },
+      inquiry: {
+        eyebrow: "Build With Noviwon",
+        title: "Tell us what you want to source, digitize or expand",
+        sub: "Share your material requirement, SaaS workflow pain point or global trade project. Our team will route it to the right Noviwon business unit.",
         name: "Name",
         email: "Email",
-        msg: "Message",
-        submit: "Send Inquiry",
+        product: "Business interest",
+        quantity: "Project scale",
+        message: "Requirement / workflow / destination market",
+        submit: "Send Message",
         sending: "Sending...",
-        success: "Sent successfully!"
+        success: "Message sent. The Noviwon team will reply within 24 hours.",
+        another: "Send Another",
       },
       footer: {
-        address: "B2, Industrial Park, Dongguan, China",
-        rights: "© 2026 PAPER.LAB ARTISAN. ALL RIGHTS RESERVED."
-      }
-    }
+        company: "Shenzhen Nuowei Advanced Materials Co., Ltd.",
+        line: "Industrial materials, SaaS systems and smart global supply chain solutions.",
+        email: "sales@noviwon.com",
+        phone: "+86 123 4567 8900",
+        address: "Shenzhen, Guangdong, China",
+        rights: "© 2026 Noviwon. All rights reserved.",
+      },
+    },
   },
   zh: {
     translation: {
-      nav: { products: "产品中心", factory: "生产实力", inquiry: "在线询盘" },
+      brand: "Noviwon",
+      company: "深圳市诺维新材有限公司",
+      nav: {
+        platform: "平台能力",
+        materials: "材料业务",
+        systems: "软件系统",
+        global: "全球外贸",
+        inquiry: "联系合作",
+      },
       hero: {
-        tag: "始于 2011 / 匠心品质",
-        title: "纸张的\n触感艺术",
-        sub: "提供高品质、环保的纸张解决方案。从特种纸批发到定制化包装，赋予品牌触手可及的温度。",
-        btn: "查看系列"
+        badge: "Industrial Materials & Smart Supply Chain Solutions",
+        title: "让工业材料与智能供应链系统协同增长",
+        sub: "Noviwon 面向制造商、进口商和 B2B 品牌，整合工业材料供应、SaaS 流程系统与全球外贸执行能力。",
+        primary: "发起合作",
+        secondary: "了解业务结构",
       },
-      stats: { area: "工厂面积", output: "年产值", export: "出口国家" },
-      factory: {
-        title: "从森林到成品",
-        desc: "我们拥有全自动海德堡印刷机及后道加工设备，确保从原纸采购到印刷加工的每一个环节都符合国际环保标准。",
-        features: ["FSC 认证原纸", "高精度模切", "环保大豆油墨"]
+      stats: {
+        markets: "服务全球市场",
+        categories: "材料品类覆盖",
+        workflow: "数字流程节点",
+        response: "询盘响应周期",
       },
-      form: {
-        title: "获取批发报价",
-        sub: "请填写您的需求，我们的销售团队将在 24 小时内联系您。",
+      platform: {
+        eyebrow: "Noviwon Operating System",
+        title: "围绕真实供应链构建的科技公司",
+        sub: "我们把材料采购、生产协同、质检文件、出货节点和客户沟通整合为一套可追踪、可复用的业务操作层。",
+        pillars: [
+          {
+            name: "Noviwon Materials",
+            label: "工业材料",
+            desc: "功能薄膜、纸基材料、标签材料、包装基材及工业消耗品定制，服务制造与分销场景。",
+          },
+          {
+            name: "Noviwon Systems",
+            label: "SaaS 与数据",
+            desc: "覆盖询报价、供应商协同、订单跟踪、质检文件和采购分析，提升 B2B 业务效率。",
+          },
+          {
+            name: "Noviwon Global",
+            label: "全球外贸",
+            desc: "为海外买家提供出口选品、供应商协调、拼柜整合、单证和物流执行。",
+          },
+        ],
+      },
+      materials: {
+        eyebrow: "Noviwon Materials",
+        title: "带工程语境的材料供应能力",
+        sub: "我们不只做目录式贸易，而是帮助客户明确规格、匹配供应商能力，并保证复购批次的稳定性。",
+        items: [
+          "功能薄膜与复合材料",
+          "纸基包装与标签基材",
+          "胶粘、涂布与卷材加工材料",
+          "工业消耗品定制与 OEM 项目",
+        ],
+      },
+      systems: {
+        eyebrow: "Noviwon Systems",
+        title: "面向采购、订单和可视化的 SaaS 工具",
+        sub: "为外贸和供应链团队提供模块化数字系统，让询盘更清晰、供应商反馈更快、订单执行可追踪。",
+        modules: [
+          "RFQ 询价管线",
+          "供应商协作空间",
+          "订单节点跟踪",
+          "质检文件中心",
+          "库存与复购提醒",
+          "贸易数据看板",
+        ],
+      },
+      global: {
+        eyebrow: "Noviwon Global",
+        title: "从合格供应商到交付落地",
+        sub: "我们结合中国本地供应链执行与国际买家沟通能力，帮助海外客户降低发货前、中、后的不确定性。",
+        steps: ["需求简报", "供应商匹配", "样品报价", "批量生产", "质检单证", "物流出货"],
+      },
+      inquiry: {
+        eyebrow: "Build With Noviwon",
+        title: "告诉我们你想采购、数字化或拓展的业务",
+        sub: "填写材料需求、SaaS 流程痛点或外贸项目，我们会分配给对应的 Noviwon 业务线跟进。",
         name: "姓名",
         email: "邮箱",
-        msg: "需求详情",
-        submit: "提交询盘",
+        product: "合作方向",
+        quantity: "项目规模",
+        message: "需求 / 流程痛点 / 目标市场",
+        submit: "发送信息",
         sending: "发送中...",
-        success: "询盘已成功发送！"
+        success: "信息已发送，Noviwon 团队将在 24 小时内回复。",
+        another: "继续发送",
       },
       footer: {
-        address: "地址：中国广东省东莞市工业园区 B2 栋",
-        rights: "© 2026 PAPER.LAB 艺术纸业版权所有"
-      }
-    }
-  }
+        company: "深圳市诺维新材有限公司",
+        line: "工业材料、SaaS 系统与智能全球供应链解决方案。",
+        email: "sales@noviwon.com",
+        phone: "+86 123 4567 8900",
+        address: "中国广东省深圳市",
+        rights: "© 2026 Noviwon. All rights reserved.",
+      },
+    },
+  },
 };
 
-i18n
-  .use(LanguageDetector)
-  .use(initReactI18next)
-  .init({
+if (!i18n.isInitialized) {
+  i18n.use(initReactI18next).init({
     resources,
+    lng: "en",
     fallbackLng: "en",
-    interpolation: { escapeValue: false }
+    interpolation: { escapeValue: false },
   });
+}
 
-// --- 子组件：移动端全屏菜单 ---
-type MobileMenuProps = {
-  isOpen: boolean;
-  onClose: () => void;
-  navItems: { id: string }[];
+type NavItem = {
+  id: "platform" | "materials" | "systems" | "global" | "inquiry";
 };
 
-const MobileMenu = ({ isOpen, onClose, navItems }: MobileMenuProps) => {
-  const { t, i18n } = useTranslation();
-  
+type Pillar = {
+  desc: string;
+  label: string;
+  name: string;
+};
+
+const navItems: NavItem[] = [
+  { id: "platform" },
+  { id: "materials" },
+  { id: "systems" },
+  { id: "global" },
+  { id: "inquiry" },
+];
+
+const heroImage =
+  "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=1500&auto=format&fit=crop";
+
+const systemsImage =
+  "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1400&auto=format&fit=crop";
+
+function MobileMenu({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
+  const { t, i18n: i18nInstance } = useTranslation();
+
   return (
     <AnimatePresence>
       {isOpen && (
-        <motion.div 
-          initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }}
-          transition={{ type: 'tween', duration: 0.3 }}
-          className="fixed inset-0 bg-[#FDFCF8] z-[100] flex flex-col p-8 lg:hidden"
+        <motion.div
+          animate={{ x: 0 }}
+          className="fixed inset-0 z-[100] flex flex-col bg-[#f7f8f5] p-6 lg:hidden"
+          exit={{ x: "100%" }}
+          initial={{ x: "100%" }}
+          transition={{ duration: 0.25, type: "tween" }}
         >
-          <div className="flex justify-between items-center mb-16">
-            <span className="font-bold text-xl tracking-tighter">PAPER.LAB</span>
-            <button onClick={onClose} className="p-2"><X size={32} /></button>
+          <div className="flex items-center justify-between">
+            <a className="block" href="#" onClick={onClose}>
+              <Image
+                alt="Noviwon logo"
+                className="h-14 w-auto"
+                height={180}
+                priority
+                src="/noviwon-logo.svg"
+                width={760}
+              />
+            </a>
+            <button
+              aria-label="Close menu"
+              className="grid h-11 w-11 place-items-center border border-slate-200 bg-white"
+              onClick={onClose}
+            >
+              <X size={22} />
+            </button>
           </div>
-          <nav className="flex flex-col space-y-8 text-4xl font-serif italic">
-            {navItems.map(item => (
-              <a key={item.id} href={`#${item.id}`} onClick={onClose} className="border-b border-gray-100 pb-4">
+
+          <nav className="mt-14 flex flex-col gap-5 text-3xl font-semibold tracking-tight">
+            {navItems.map((item) => (
+              <a
+                className="flex items-center justify-between border-b border-slate-200 pb-5"
+                href={`#${item.id}`}
+                key={item.id}
+                onClick={onClose}
+              >
                 {t(`nav.${item.id}`)}
+                <ChevronRight size={22} />
               </a>
             ))}
           </nav>
-          <div className="mt-auto flex gap-4">
-            <button 
-              onClick={() => { i18n.changeLanguage('zh'); onClose(); }}
-              className={`flex-1 py-4 text-xs tracking-widest uppercase border ${i18n.language.startsWith('zh') ? 'bg-black text-white' : 'border-gray-200'}`}
-            >中文</button>
-            <button 
-              onClick={() => { i18n.changeLanguage('en'); onClose(); }}
-              className={`flex-1 py-4 text-xs tracking-widest uppercase border ${i18n.language.startsWith('en') ? 'bg-black text-white' : 'border-gray-200'}`}
-            >English</button>
+
+          <div className="mt-auto grid grid-cols-2 gap-3">
+            {["en", "zh"].map((lang) => (
+              <button
+                className={`h-12 border text-sm font-bold ${
+                  i18nInstance.language.startsWith(lang)
+                    ? "border-slate-950 bg-slate-950 text-white"
+                    : "border-slate-200 bg-white text-slate-950"
+                }`}
+                key={lang}
+                onClick={() => {
+                  i18nInstance.changeLanguage(lang);
+                  onClose();
+                }}
+              >
+                {lang === "en" ? "English" : "中文"}
+              </button>
+            ))}
           </div>
         </motion.div>
       )}
     </AnimatePresence>
   );
-};
+}
 
-// --- 主页面组件 ---
-export default function PaperTradeSite() {
-  const { t, i18n } = useTranslation();
+export default function NoviwonSite() {
+  const { t, i18n: i18nInstance } = useTranslation();
+  const [formStatus, setFormStatus] = useState<"IDLE" | "SENDING" | "SUCCESS" | "ERROR">(
+    "IDLE",
+  );
+  const [formError, setFormError] = useState("");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [formStatus, setFormStatus] = useState('IDLE');
 
-  const navItems = [{id: 'products'}, {id: 'factory'}, {id: 'inquiry'}];
+  const pillars = t("platform.pillars", { returnObjects: true }) as Pillar[];
+  const materialItems = t("materials.items", { returnObjects: true }) as string[];
+  const systemModules = t("systems.modules", { returnObjects: true }) as string[];
+  const globalSteps = t("global.steps", { returnObjects: true }) as string[];
 
-  // 响应式滚动锁：打开菜单时静止背景滚动
   useEffect(() => {
-    document.body.style.overflow = isMenuOpen ? 'hidden' : 'unset';
+    document.body.style.overflow = isMenuOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [isMenuOpen]);
 
   return (
-    <div className="min-h-screen bg-[#FDFCF8] text-[#2C2C2C] font-serif scroll-smooth selection:bg-gray-200">
-      
-      {/* 移动端菜单组件 */}
-      <MobileMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} navItems={navItems} />
+    <main className="min-h-screen bg-[#f7f8f5] text-slate-950">
+      <MobileMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
 
-      {/* 导航栏 (响应式：PC+移动) */}
-      <nav className="flex justify-between items-center px-6 md:px-12 py-8 sticky top-0 bg-[#FDFCF8]/90 backdrop-blur-md z-50 border-b border-gray-50">
-        <div className="text-2xl font-bold tracking-tighter cursor-pointer" onClick={() => window.scrollTo({top:0, behavior:'smooth'})}>
-          PAPER.LAB
-        </div>
-        
-        {/* 桌面端导航 (PC ONLY) */}
-        <div className="hidden lg:flex items-center space-x-12 text-[10px] uppercase tracking-[0.2em] font-sans font-bold">
-          {navItems.map(item => (
-            <a key={item.id} href={`#${item.id}`} className="hover:opacity-40 transition-opacity whitespace-nowrap">
-              {t(`nav.${item.id}`)}
+      <nav className="sticky top-0 z-50 border-b border-slate-200/80 bg-[#f7f8f5]/90 px-5 py-4 backdrop-blur md:px-10">
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-6">
+          <a className="block shrink-0" href="#">
+            <Image
+              alt="Noviwon logo"
+              className="h-12 w-auto md:h-14"
+              height={180}
+              priority
+              src="/noviwon-logo.svg"
+              width={760}
+            />
+          </a>
+
+          <div className="hidden items-center gap-7 text-sm font-semibold text-slate-600 lg:flex">
+            {navItems.map((item) => (
+              <a className="transition hover:text-slate-950" href={`#${item.id}`} key={item.id}>
+                {t(`nav.${item.id}`)}
+              </a>
+            ))}
+          </div>
+
+          <div className="hidden items-center gap-3 lg:flex">
+            <button
+              className="h-10 border border-slate-300 px-4 text-sm font-bold transition hover:border-slate-950"
+              onClick={() =>
+                i18nInstance.changeLanguage(i18nInstance.language.startsWith("zh") ? "en" : "zh")
+              }
+            >
+              {i18nInstance.language.startsWith("zh") ? "EN" : "中文"}
+            </button>
+            <a
+              className="inline-flex h-10 items-center gap-2 bg-slate-950 px-5 text-sm font-bold text-white transition hover:bg-slate-800"
+              href="#inquiry"
+            >
+              {t("nav.inquiry")}
+              <ArrowRight size={16} />
             </a>
-          ))}
-          <button 
-            onClick={() => i18n.changeLanguage(i18n.language.startsWith('zh') ? 'en' : 'zh')}
-            className="px-5 py-2 bg-black text-white rounded-full hover:scale-105 transition-transform"
+          </div>
+
+          <button
+            aria-label="Open menu"
+            className="grid h-11 w-11 place-items-center border border-slate-200 bg-white lg:hidden"
+            onClick={() => setIsMenuOpen(true)}
           >
-            {i18n.language.startsWith('zh') ? 'EN' : '中文'}
+            <Menu size={22} />
           </button>
         </div>
-
-        {/* 移动端汉堡按钮 (MOBILE ONLY) */}
-        <button className="lg:hidden p-2" onClick={() => setIsMenuOpen(true)}>
-          <Menu size={28} />
-        </button>
       </nav>
 
-      {/* Hero Section */}
-      <header className="max-w-7xl mx-auto px-6 md:px-12 py-16 lg:py-32 grid lg:grid-cols-2 gap-16 items-center">
-        <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="space-y-8">
-          <div className="inline-block px-3 py-1 border border-gray-200 rounded-full text-[9px] uppercase tracking-[0.3em] font-sans text-gray-400 font-bold">
-            {t('hero.tag')}
+      <section className="mx-auto grid max-w-7xl gap-10 px-5 py-12 md:px-10 lg:grid-cols-[1fr_0.9fr] lg:py-20">
+        <motion.div
+          animate={{ opacity: 1, y: 0 }}
+          className="flex flex-col justify-center"
+          initial={{ opacity: 0, y: 16 }}
+          transition={{ duration: 0.45 }}
+        >
+          <div className="mb-6 inline-flex w-fit items-center gap-2 border border-cyan-200 bg-cyan-50 px-3 py-2 text-xs font-black uppercase tracking-[0.16em] text-cyan-800">
+            <Network size={15} />
+            {t("hero.badge")}
           </div>
-          <h1 className="text-5xl md:text-7xl lg:text-8xl leading-[1.1] font-medium tracking-tight whitespace-pre-line">
-            {t('hero.title')}
-          </h1>
-          <p className="text-lg text-gray-400 font-sans font-light leading-relaxed max-w-sm italic">
-            {t('hero.sub')}
+          <p className="mb-4 text-sm font-bold uppercase tracking-[0.22em] text-slate-500">
+            {t("company")}
           </p>
-          <a href="#products" className="group flex items-center space-x-4 text-lg border-b border-gray-300 w-fit pb-2 hover:border-black transition-all">
-            <span>{t('hero.btn')}</span>
-            <ArrowRight className="group-hover:translate-x-2 transition-transform" />
-          </a>
+          <h1 className="max-w-5xl text-5xl font-black leading-[1.02] tracking-tight md:text-7xl">
+            {t("hero.title")}
+          </h1>
+          <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-600 md:text-xl">
+            {t("hero.sub")}
+          </p>
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <a
+              className="inline-flex h-13 items-center justify-center gap-2 bg-slate-950 px-6 text-sm font-black text-white transition hover:bg-slate-800"
+              href="#inquiry"
+            >
+              {t("hero.primary")}
+              <Send size={17} />
+            </a>
+            <a
+              className="inline-flex h-13 items-center justify-center gap-2 border border-slate-300 bg-white px-6 text-sm font-black transition hover:border-slate-950"
+              href="#platform"
+            >
+              {t("hero.secondary")}
+              <ArrowRight size={17} />
+            </a>
+          </div>
         </motion.div>
-        <div className="relative aspect-[4/5] bg-gray-50 overflow-hidden shadow-2xl rounded-sm">
-          <img 
-            src="https://images.unsplash.com/photo-1516533075015-a3838414c3cb?q=80&w=1200" 
-            className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000" 
-            alt="Paper Texture"
+
+        <div className="relative min-h-[460px] overflow-hidden bg-slate-200">
+          <Image
+            alt="Industrial automation and smart manufacturing"
+            className="object-cover"
+            fill
+            priority
+            sizes="(min-width: 1024px) 45vw, 100vw"
+            src={heroImage}
           />
-        </div>
-      </header>
-
-      {/* 数据看板 (响应式网格) */}
-      <section className="bg-[#2C2C2C] text-white py-20">
-        <div className="max-w-7xl mx-auto px-6 md:px-12 grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
-          <div className="space-y-2">
-            <div className="text-4xl lg:text-5xl font-light">12,000 m²</div>
-            <div className="text-[9px] uppercase tracking-[0.4em] text-white/30 font-sans font-bold">{t('stats.area')}</div>
-          </div>
-          <div className="space-y-2 border-y md:border-y-0 md:border-x border-white/10 py-8 md:py-0">
-            <div className="text-4xl lg:text-5xl font-light">5,000w+</div>
-            <div className="text-[9px] uppercase tracking-[0.4em] text-white/30 font-sans font-bold">{t('stats.output')}</div>
-          </div>
-          <div className="space-y-2">
-            <div className="text-4xl lg:text-5xl font-light">45+</div>
-            <div className="text-[9px] uppercase tracking-[0.4em] text-white/30 font-sans font-bold">{t('stats.export')}</div>
-          </div>
-        </div>
-      </section>
-
-      {/* 工厂展示 (移动端堆叠，PC端并排) */}
-      <section id="factory" className="py-24 px-6 md:px-12 max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
-        <div className="grid grid-cols-2 gap-4 order-2 lg:order-1">
-          <img src="https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?q=80&w=600" className="aspect-[3/4] object-cover rounded-sm" />
-          <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=600" className="aspect-[3/4] object-cover rounded-sm mt-12" />
-        </div>
-        <div className="space-y-8 order-1 lg:order-2">
-          <h2 className="text-[10px] uppercase tracking-[0.4em] text-gray-300 font-sans font-bold uppercase">{t('nav.factory')}</h2>
-          <h3 className="text-4xl md:text-5xl italic font-light leading-tight">{t('factory.title')}</h3>
-          <p className="text-gray-500 font-sans leading-relaxed text-lg">{t('factory.desc')}</p>
-          <div className="flex flex-wrap gap-4 pt-4">
-            {(t('factory.features', { returnObjects: true }) as string[]).map((f: string) => (
-              <span key={f} className="px-4 py-2 border border-gray-100 bg-white text-[9px] font-sans font-bold uppercase tracking-widest">{f}</span>
+          <div className="absolute inset-0 bg-slate-950/18" />
+          <div className="absolute bottom-0 left-0 right-0 grid grid-cols-2 bg-white/94 backdrop-blur md:grid-cols-4">
+            {[
+              ["30+", t("stats.markets")],
+              ["120+", t("stats.categories")],
+              ["18", t("stats.workflow")],
+              ["24h", t("stats.response")],
+            ].map(([value, label]) => (
+              <div className="border-r border-slate-200 p-4 last:border-r-0" key={label}>
+                <div className="text-2xl font-black">{value}</div>
+                <div className="mt-1 text-xs font-bold uppercase tracking-wide text-slate-500">
+                  {label}
+                </div>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* 询盘表单 (高度兼容移动端输入) */}
-      <section id="inquiry" className="py-24 px-6 md:px-12 bg-[#F9F8F4]">
-        <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-4xl mb-6">{t('form.title')}</h2>
-          <p className="text-gray-400 font-sans mb-16">{t('form.sub')}</p>
-          
+      <section id="platform" className="border-y border-slate-200 bg-white px-5 py-18 md:px-10">
+        <div className="mx-auto max-w-7xl">
+          <div className="grid gap-8 lg:grid-cols-[0.8fr_1fr] lg:items-end">
+            <div>
+              <p className="text-sm font-black uppercase tracking-[0.22em] text-cyan-700">
+                {t("platform.eyebrow")}
+              </p>
+              <h2 className="mt-3 text-4xl font-black tracking-tight md:text-5xl">
+                {t("platform.title")}
+              </h2>
+            </div>
+            <p className="text-lg leading-8 text-slate-600">{t("platform.sub")}</p>
+          </div>
+
+          <div className="mt-10 grid gap-4 lg:grid-cols-3">
+            {pillars.map((pillar, index) => {
+              const icons = [Layers3, Cpu, Globe2];
+              const Icon = icons[index] ?? Layers3;
+
+              return (
+                <article className="border border-slate-200 bg-[#f7f8f5] p-6" key={pillar.name}>
+                  <div className="grid h-12 w-12 place-items-center bg-slate-950 text-white">
+                    <Icon size={22} />
+                  </div>
+                  <div className="mt-6 text-xs font-black uppercase tracking-[0.18em] text-cyan-700">
+                    {pillar.label}
+                  </div>
+                  <h3 className="mt-2 text-2xl font-black tracking-tight">{pillar.name}</h3>
+                  <p className="mt-4 text-sm leading-7 text-slate-600">{pillar.desc}</p>
+                </article>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      <section id="materials" className="px-5 py-18 md:px-10">
+        <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.85fr_1fr] lg:items-center">
+          <div>
+            <p className="text-sm font-black uppercase tracking-[0.22em] text-cyan-700">
+              {t("materials.eyebrow")}
+            </p>
+            <h2 className="mt-3 text-4xl font-black tracking-tight md:text-5xl">
+              {t("materials.title")}
+            </h2>
+            <p className="mt-5 text-lg leading-8 text-slate-600">{t("materials.sub")}</p>
+          </div>
+          <div className="grid gap-3 sm:grid-cols-2">
+            {materialItems.map((item, index) => {
+              const icons = [FileText, Boxes, Factory, ShieldCheck];
+              const Icon = icons[index] ?? BadgeCheck;
+
+              return (
+                <div className="flex min-h-28 items-start gap-4 border border-slate-200 bg-white p-5" key={item}>
+                  <Icon className="mt-1 shrink-0 text-cyan-700" size={22} />
+                  <span className="text-lg font-black leading-7">{item}</span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      <section id="systems" className="bg-slate-950 px-5 py-18 text-white md:px-10">
+        <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-2 lg:items-center">
+          <div className="relative h-[430px] overflow-hidden bg-slate-900">
+            <Image
+              alt="Supply chain analytics dashboard"
+              className="object-cover opacity-80"
+              fill
+              sizes="(min-width: 1024px) 50vw, 100vw"
+              src={systemsImage}
+            />
+          </div>
+          <div>
+            <p className="text-sm font-black uppercase tracking-[0.22em] text-cyan-300">
+              {t("systems.eyebrow")}
+            </p>
+            <h2 className="mt-3 text-4xl font-black tracking-tight md:text-5xl">
+              {t("systems.title")}
+            </h2>
+            <p className="mt-5 text-lg leading-8 text-slate-300">{t("systems.sub")}</p>
+            <div className="mt-8 grid gap-3 sm:grid-cols-2">
+              {systemModules.map((module, index) => {
+                const icons = [Database, Network, Truck, FileText, Cloud, BarChart3];
+                const Icon = icons[index] ?? Database;
+
+                return (
+                  <div className="flex items-center gap-3 border border-white/12 bg-white/6 p-4" key={module}>
+                    <Icon className="shrink-0 text-cyan-300" size={20} />
+                    <span className="font-semibold leading-6 text-slate-100">{module}</span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="global" className="px-5 py-18 md:px-10">
+        <div className="mx-auto max-w-7xl">
+          <div className="max-w-3xl">
+            <p className="text-sm font-black uppercase tracking-[0.22em] text-cyan-700">
+              {t("global.eyebrow")}
+            </p>
+            <h2 className="mt-3 text-4xl font-black tracking-tight md:text-5xl">
+              {t("global.title")}
+            </h2>
+            <p className="mt-5 text-lg leading-8 text-slate-600">{t("global.sub")}</p>
+          </div>
+
+          <div className="mt-10 grid gap-3 md:grid-cols-3 lg:grid-cols-6">
+            {globalSteps.map((step, index) => (
+              <div className="border border-slate-200 bg-white p-5" key={step}>
+                <div className="text-sm font-black text-cyan-700">{String(index + 1).padStart(2, "0")}</div>
+                <div className="mt-8 text-lg font-black">{step}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section id="inquiry" className="border-t border-slate-200 bg-white px-5 py-18 md:px-10">
+        <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.78fr_1fr]">
+          <div>
+            <p className="text-sm font-black uppercase tracking-[0.22em] text-cyan-700">
+              {t("inquiry.eyebrow")}
+            </p>
+            <h2 className="mt-3 text-4xl font-black tracking-tight md:text-5xl">
+              {t("inquiry.title")}
+            </h2>
+            <p className="mt-5 text-lg leading-8 text-slate-600">{t("inquiry.sub")}</p>
+
+            <div className="mt-8 grid gap-3 text-sm font-semibold text-slate-700">
+              <a className="flex items-center gap-3" href={`mailto:${t("footer.email")}`}>
+                <Mail className="text-cyan-700" size={19} />
+                {t("footer.email")}
+              </a>
+              <a className="flex items-center gap-3" href="https://wa.me/861234567890">
+                <MessageCircle className="text-cyan-700" size={19} />
+                WhatsApp: {t("footer.phone")}
+              </a>
+              <span className="flex items-center gap-3">
+                <Globe2 className="text-cyan-700" size={19} />
+                Noviwon Materials / Systems / Global
+              </span>
+            </div>
+          </div>
+
           <AnimatePresence mode="wait">
-            {formStatus === 'SUCCESS' ? (
-              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-white p-12 shadow-xl rounded-sm space-y-6">
-                <CheckCircle2 size={48} className="mx-auto text-green-800" />
-                <p className="text-xl italic">{t('form.success')}</p>
-                <button onClick={() => setFormStatus('IDLE')} className="text-[10px] uppercase tracking-widest border-b border-black pb-1">Send Another</button>
+            {formStatus === "SUCCESS" ? (
+              <motion.div
+                animate={{ opacity: 1, y: 0 }}
+                className="border border-cyan-200 bg-[#f7f8f5] p-8 text-center"
+                exit={{ opacity: 0, y: -10 }}
+                initial={{ opacity: 0, y: 10 }}
+              >
+                <CheckCircle2 className="mx-auto text-cyan-700" size={52} />
+                <p className="mx-auto mt-5 max-w-md text-xl font-bold leading-8">
+                  {t("inquiry.success")}
+                </p>
+                <button
+                  className="mt-7 border border-slate-300 px-5 py-3 text-sm font-black transition hover:border-slate-950"
+                  onClick={() => setFormStatus("IDLE")}
+                >
+                  {t("inquiry.another")}
+                </button>
               </motion.div>
             ) : (
-              <form className="grid grid-cols-1 md:grid-cols-2 gap-8 text-left" onSubmit={(e) => { e.preventDefault(); setFormStatus('SENDING'); setTimeout(()=>setFormStatus('SUCCESS'), 1500); }}>
-                <div className="space-y-2 border-b border-gray-200 focus-within:border-black transition-colors">
-                  <label className="text-[9px] uppercase tracking-widest font-sans text-gray-400 font-bold">{t('form.name')}</label>
-                  <input required className="w-full bg-transparent py-3 outline-none font-sans" />
-                </div>
-                <div className="space-y-2 border-b border-gray-200 focus-within:border-black transition-colors">
-                  <label className="text-[9px] uppercase tracking-widest font-sans text-gray-400 font-bold">{t('form.email')}</label>
-                  <input required type="email" className="w-full bg-transparent py-3 outline-none font-sans" />
-                </div>
-                <div className="md:col-span-2 space-y-2 border-b border-gray-200 focus-within:border-black transition-colors">
-                  <label className="text-[9px] uppercase tracking-widest font-sans text-gray-400 font-bold">{t('form.msg')}</label>
-                  <textarea required rows={3} className="w-full bg-transparent py-3 outline-none font-sans resize-none" />
-                </div>
-                <button className="md:col-span-2 w-full bg-[#2C2C2C] text-white py-5 rounded-full font-sans text-[10px] tracking-[0.4em] uppercase flex items-center justify-center space-x-3 shadow-lg hover:bg-black transition-all">
-                  {formStatus === 'SENDING' ? <Loader2 className="animate-spin" /> : <Send size={14} />}
-                  <span>{formStatus === 'SENDING' ? t('form.sending') : t('form.submit')}</span>
+              <motion.form
+                animate={{ opacity: 1, y: 0 }}
+                className="grid gap-4 border border-slate-200 bg-[#f7f8f5] p-5 md:grid-cols-2 md:p-8"
+                exit={{ opacity: 0, y: -10 }}
+                initial={{ opacity: 0, y: 10 }}
+                onSubmit={async (event) => {
+                  event.preventDefault();
+                  setFormStatus("SENDING");
+                  setFormError("");
+
+                  const formData = new FormData(event.currentTarget);
+                  const response = await fetch("/api/inquiry", {
+                    body: JSON.stringify(Object.fromEntries(formData.entries())),
+                    headers: { "Content-Type": "application/json" },
+                    method: "POST",
+                  });
+
+                  if (response.ok) {
+                    event.currentTarget.reset();
+                    setFormStatus("SUCCESS");
+                    return;
+                  }
+
+                  const result = (await response.json().catch(() => null)) as {
+                    error?: string;
+                  } | null;
+                  setFormError(result?.error ?? "Unable to send message. Please email us directly.");
+                  setFormStatus("ERROR");
+                }}
+              >
+                {[
+                  ["name", "text"],
+                  ["email", "email"],
+                  ["product", "text"],
+                  ["quantity", "text"],
+                ].map(([field, type]) => (
+                  <label className="block" key={field}>
+                    <span className="text-xs font-black uppercase tracking-[0.16em] text-slate-500">
+                      {t(`inquiry.${field}`)}
+                    </span>
+                    <input
+                      className="mt-2 h-12 w-full border border-slate-200 bg-white px-4 outline-none transition focus:border-slate-950"
+                      name={field}
+                      required
+                      type={type}
+                    />
+                  </label>
+                ))}
+
+                <label className="block md:col-span-2">
+                  <span className="text-xs font-black uppercase tracking-[0.16em] text-slate-500">
+                    {t("inquiry.message")}
+                  </span>
+                  <textarea
+                    className="mt-2 min-h-32 w-full resize-none border border-slate-200 bg-white px-4 py-3 outline-none transition focus:border-slate-950"
+                    name="message"
+                    required
+                  />
+                </label>
+
+                {formStatus === "ERROR" && (
+                  <p className="border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold leading-6 text-red-700 md:col-span-2">
+                    {formError}
+                  </p>
+                )}
+
+                <button
+                  className="inline-flex h-13 items-center justify-center gap-2 bg-slate-950 px-6 text-sm font-black text-white transition hover:bg-slate-800 md:col-span-2"
+                  disabled={formStatus === "SENDING"}
+                >
+                  {formStatus === "SENDING" ? (
+                    <Sparkles className="animate-pulse" size={17} />
+                  ) : (
+                    <Send size={17} />
+                  )}
+                  {formStatus === "SENDING" ? t("inquiry.sending") : t("inquiry.submit")}
                 </button>
-              </form>
+              </motion.form>
             )}
           </AnimatePresence>
         </div>
       </section>
 
-      {/* 页脚 */}
-      <footer className="py-20 px-6 md:px-12 bg-white border-t border-gray-50">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-12">
-          <div className="text-2xl font-bold tracking-tighter">PAPER.LAB</div>
-          <div className="flex flex-col items-center md:items-end space-y-4 font-sans text-[10px] text-gray-400 uppercase tracking-widest">
-            <div className="flex space-x-6">
-              <a href="mailto:sales@paperlab.com" className="hover:text-black transition-colors flex items-center gap-2"><Mail size={14}/> EMAIL</a>
-              <a href="tel:+86123456789" className="hover:text-black transition-colors flex items-center gap-2"><Phone size={14}/> WHATSAPP</a>
+      <footer className="border-t border-slate-200 bg-slate-950 px-5 py-10 text-white md:px-10">
+        <div className="mx-auto flex max-w-7xl flex-col gap-8 md:flex-row md:items-center md:justify-between">
+          <div>
+            <div>
+              <Image
+                alt="Noviwon logo"
+                className="h-16 w-auto"
+                height={180}
+                src="/noviwon-logo.svg"
+                width={760}
+              />
             </div>
-            <p>{t('footer.address')}</p>
-            <p>{t('footer.rights')}</p>
+            <p className="mt-3 font-semibold text-slate-300">{t("footer.company")}</p>
+            <p className="mt-2 max-w-xl text-sm leading-7 text-slate-400">{t("footer.line")}</p>
+          </div>
+          <div className="text-sm font-semibold leading-7 text-slate-300 md:text-right">
+            <p>{t("footer.address")}</p>
+            <p>{t("footer.email")}</p>
+            <p>{t("footer.rights")}</p>
           </div>
         </div>
       </footer>
-    </div>
+    </main>
   );
 }
